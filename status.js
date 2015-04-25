@@ -1,0 +1,1 @@
+{"fanover": 1, "connected": 1, "temp": 69.0, "fanset": 0, "photo": 1, "pir": 1, "lightover": 0, "lightset": 0, "sleep": 0}

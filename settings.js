@@ -1,0 +1,1 @@
+{"sleep":0,"security":0,"lightover":0,"fanover":0,"tempthresh":100,"lightthresh":250,"timeout":250,"fanset":0,"lightset":0,"sleeptime":15}
