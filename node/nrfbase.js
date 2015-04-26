@@ -20,19 +20,25 @@ app.use(bodyParser.urlencoded({extended: false}));
 var tx, rx1, rx2;
 var sock;
 setInterval(function(){lightover=0;radioSend();meterUpdate();butUpdate();},2700000);
+function startRadio(){
+	nrf.end(function(){
+		nrf.begin(function () {
+		    nrf.printDetails();
+		    tx = nrf.openPipe('tx', pipes[0]);
+		    rx1 = nrf.openPipe('rx', pipes[1]);
+		    rx2 = nrf.openPipe('rx', pipes[2]);
+		    rx1.on('data', function(d){recvDat(d)});
+		    rx2.on('data', function(d){recvDat(d)});
+		    tx.on('error', function (e) {
+			console.warn("Error sending reply.", e);
+			startRadio();
+		    });	
+		});
+	});
+}
 //nrf._debug = true;
-nrf.channel(0x4c).transmitPower('PA_HIGH').dataRate('1Mbps').crcBytes(2).autoRetransmit({count:15, delay:4000}).begin(function () {
-    nrf.printDetails();
-    tx = nrf.openPipe('tx', pipes[0]);
-    rx1 = nrf.openPipe('rx', pipes[1]);
-    rx2 = nrf.openPipe('rx', pipes[2]);
-    rx1.on('data', function(d){recvDat(d)});
-    rx2.on('data', function(d){recvDat(d)});
-    tx.on('error', function (e) {
-        console.warn("Error sending reply.", e);
-    });
-	
-});
+nrf.channel(0x4c).transmitPower('PA_HIGH').dataRate('1Mbps').crcBytes(2).autoRetransmit({count:15, delay:4000});
+startRadio();
 app.get('/status.json', function (req, res) {
 	var senddat = {"connected":connected, "pir": pir, "temp":temp, "light":light, "sleep":sleep, "fanover":fanover, "lightover":lightover, "lightset": lightset, "fanset": fanset};
 	res.jsonp(senddat);
