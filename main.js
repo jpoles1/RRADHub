@@ -1,5 +1,5 @@
 var settings = {sleep: 0, sleeptime: 12, security: 0, lightover: 0, fanover: 0, tempthresh: 0, lightthresh: 0, timeout: 0, fanset: 0, lightset: 0};
-var g1, g2, g3;
+var g1, g2, g3, g4, g5, g6;
 var socket = io('192.168.1.50:3000');
 socket.on('butupdate', function(data){
 	if(data.sleep!=settings['sleep']){
@@ -31,6 +31,7 @@ socket.on('meterupdate', function(data){
 	g3.refresh(data.pir);
 	g4.refresh(data.connected);
 	g5.refresh(data.sleep);
+	g6.refresh(data.humid);
 });
 var passprompt = {
 	state0: {
@@ -124,7 +125,7 @@ $(function () {
 		id: "photo",
 		value: 0,
 		min: 0,
-		max: 250,
+		max: 350,
 		title: "Light Sensor",
 		label: "",
 		levelColorsGradient: true
@@ -153,6 +154,15 @@ $(function () {
 		min: 0,
 		max: 1,
 		title: "Sleep",
+		label: "",
+		levelColors: ["#006600"]
+	});
+	g6 = new JustGage({
+		id: "humid",
+		value: 0,
+		min: 0,
+		max: 100,
+		title: "Humidity",
 		label: "",
 		levelColors: ["#006600"]
 	});

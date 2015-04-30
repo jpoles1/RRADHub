@@ -7,23 +7,33 @@ $(function(){
 			zoomType: 'x'
 		},
 		title: {
-			text: 'Temperature'
+			text: 'Room Temperature and Humidity'
 		},
 		xAxis: {
 			type: 'datetime'
 		},
-		yAxis: {
+		yAxis: [{
+			labels: {
+				format: '{value}°F'
+			},
 			title: {
-				text: 'Degrees Farenheit'
+				text: 'Temperature'
 			}
-		},
+		},{
+			labels: {
+				format: '{value}%'
+			},
+			title: {
+				text: 'Humidity'
+			}, opposite: true
+		}],
 		plotOptions: {
 			spline: {
 				marker: {
 					enabled: false
 				}			}
 		},
-		series: [{name: "Temperature", data: []}]
+		series: [{name: "Temperature", data: [], tooltip: {valueSuffix: ' °F'}}, {name: "Humidity", data: [], yAxis: 1, tooltip: {valueSuffix: ' %'}}]
 	};
 	var lightoptions = {
 		chart: {
@@ -32,7 +42,7 @@ $(function(){
 			zoomType: 'x'
 		},
 		title: {
-			text: 'Light Intensity'
+			text: 'Room Light Intensity'
 		},
 		xAxis: {
 			type: 'datetime'
@@ -106,6 +116,7 @@ $(function(){
 		$.each(data, function(num, i){
 			lightoptions.series[0].data.push([i.time, i.light]);
 			tempoptions.series[0].data.push([i.time, i.temp]);
+			tempoptions.series[1].data.push([i.time, i.humid]);
 		});
 		var chart1 = new Highcharts.Chart(tempoptions);
 		var chart2 = new Highcharts.Chart(lightoptions);

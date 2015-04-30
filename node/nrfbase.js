@@ -4,7 +4,7 @@ var NRF24 = require("nrf"),
     cePin = 24,
     irqPin = 17,
     pipes = config.pipes;
-var connected=0, sleep=0, security=0, pir=0, temp = 1, light = 1, lightover=0, fanover=0, lightset=1, fanset=0;
+var connected=0, sleep=0, security=0, pir=0, temp = 1, hum=1, light = 1, lightover=0, fanover=0, lightset=1, fanset=0;
 //var setdat = {"sleep":sleep, "fanover":fanover, "lightover":lightover, "lightset": lightset, "fanset": fanset};
 //var statusdat = {"connected":connected, "pir": pir, "temp":temp, "light":light};
 var nrf = NRF24.connect(spiDev, cePin, irqPin);
@@ -112,7 +112,7 @@ io.on('connection', function(socket){
 	});
 	socket.on('getchart', function(){
 		if(dbenable==1){
-			collection.DataLog.find({temp: {$exists: true}}, {time: 1, temp: 1, light: 1}).sort({"time": -1}).limit(500, function(err, docs){
+			collection.DataLog.find({temp: {$exists: true}}, {time: 1, temp: 1, light: 1, humid: 1}).sort({"time": -1}).limit(500, function(err, docs){
 				socket.emit('templightdat', docs.reverse());
 			});
 			collection.DataLog.find({pir: {$exists: true}}, {time: 1, pir: 1, sleep: 1}).sort({"time": -1}).limit(500, function(err, docs){
@@ -136,10 +136,12 @@ function recvDat(d){
 		if(id==1){
 			temp = var1;
 			light=var2;
-			console.log("Temp:", temp, "Light:", light);
+            pir = var3;
+            hum = var4;
+			console.log("Temp:", temp, "Light:", light, "Humidity:", hum);
 			meterUpdate();
 			if(dbenable==1){
-				collection.DataLog.save({time: Date.now(), temp: temp, light: light}, function(err, updated) {
+				collection.DataLog.save({time: Date.now(), temp: temp, light: light, humid: hum}, function(err, updated) {
 				  if( err || !updated ) console.log("Update Failed");
 				});
 			}
@@ -178,7 +180,7 @@ function colorChange(id){
 }
 function meterUpdate(){
 	try{
-		io.emit('meterupdate', {"sleep":sleep, "connected":connected, "pir": pir, "temp":temp, "light":light});
+		io.emit('meterupdate', {"sleep":sleep, "connected":connected, "pir": pir, "temp":temp, "light":light, "humid": hum});
 	}
 	catch(e){
 		console.log("Failed to update webpage");
