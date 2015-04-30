@@ -23,7 +23,7 @@
           <div id="temp" class='col-md-4 meter'></div>
           <div id="photo" class='col-md-4 meter'></div>
           <div id="pir" class='col-md-4 meter'></div>
-          <div id="" class='col-md-4 meter'></div>
+          <div id="humid" class='col-md-4 meter'></div>
           <div id="connected" class='col-md-4 meter'></div> 
           <div id="slee" class='col-md-4 meter'></div>
         </div>

@@ -136,7 +136,9 @@ function recvDat(d){
 		if(id==1){
 			temp = var1;
 			light=var2;
-            pir = var3;
+            if(var3==1){
+                pir=1;
+            }
             hum = var4;
 			console.log("Temp:", temp, "Light:", light, "Humidity:", hum);
 			meterUpdate();
