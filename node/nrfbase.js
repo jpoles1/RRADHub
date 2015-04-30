@@ -1,7 +1,8 @@
 var config = require("./config");
 var NRF24 = require("nrf"),
     spiDev = "/dev/spidev0.1",
-    cePin = 24, irqPin = 17,            //var ce = require("./gpio").connect(cePin)
+    cePin = 24,
+    irqPin = 17,
     pipes = config.pipes;
 var connected=0, sleep=0, security=0, pir=0, temp = 1, light = 1, lightover=0, fanover=0, lightset=1, fanset=0;
 //var setdat = {"sleep":sleep, "fanover":fanover, "lightover":lightover, "lightset": lightset, "fanset": fanset};
@@ -20,6 +21,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 var tx, rx1, rx2;
 var sock;
 setInterval(function(){lightover=0;radioSend();meterUpdate();butUpdate();},2700000);
+//nrf._debug = true;
 nrf.channel(0x4c).transmitPower('PA_HIGH').dataRate('1Mbps').crcBytes(2).autoRetransmit({count:15, delay:4000}).begin(function () {
     nrf.printDetails();
     tx = nrf.openPipe('tx', pipes[0], {autoAck: false});
