@@ -112,17 +112,14 @@ io.on('connection', function(socket){
 	});
 	socket.on('getchart', function(){
 		if(dbenable==1){
-			collection.DataLog.find({temp: {$exists: true}}, {time: 1, temp: 1, light: 1, humid: 1}).sort({"time": -1}).limit(500, function(err, docs){
+			collection.DataLog.find({temp: {$exists: true}}, {time: 1, temp: 1, light: 1, humid: 1}).sort({"time": -1}).limit(1000, function(err, docs){
 				socket.emit('templightdat', docs.reverse());
 			});
-			collection.DataLog.find({pir: {$exists: true}}, {time: 1, pir: 1, sleep: 1}).sort({"time": -1}).limit(500, function(err, docs){
+			collection.DataLog.find({pir: {$exists: true}}, {time: 1, pir: 1, sleep: 1}).sort({"time": -1}).limit(1000, function(err, docs){
 				socket.emit('pirsleepdat', docs.reverse());
 			});
 		}
 	});
-	if(dbenable==1){
-		collection.DataLog.find({temp: {$exists: true}}, {time: 1, temp: 1});
-	}
 });
 function recvDat(d){
 	connected=1
